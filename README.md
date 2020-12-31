@@ -24,6 +24,9 @@ So what I'm thinking for now at least is to have it work basically like this:
 - Have a favourites folder for wallpapers that you've liked and want to set aside
 - Choose a random picture from the downloads folder to use as wallpaper and save the path somewhere
 - use tapet -f (--favorite) to copy the wallpaper to favorites folder
+- for now at least using external programs such as nitrogen or feh to set the background
+- autodetect to see what walpapersetter(s) are installed on the system if none are configured in the
+  config
 - use tapet -n to go to the next next wallpaper
   - will move the current wallpaper to the previous folder
   - choose a new downloaded wallpaper or favourite (random from one of them)
