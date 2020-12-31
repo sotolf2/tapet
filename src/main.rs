@@ -2,10 +2,11 @@ use clap::{App, Arg};
 use std::env;
 use std::collections::HashMap;
 use std::path::Path;
-pub mod config;
-//use crate::config;
+use std::io::Error;
+mod config;
+mod core;
 
-fn main() {
+fn main() -> Result<(), Error> {
     // Parse arguements
     let matches = App::new("tapet")
         .version("0.1")
@@ -40,7 +41,12 @@ fn main() {
     let relative_conf_path = "/tapet/tapet.toml";
     let config_string = format!("{}{}", config_folder, relative_conf_path);
     let configuration_file = Path::new(&config_string);
+    
+    // Parse configuration
+    let configuration = config::parse_config(configuration_file)?;
 
-    let configuration = config::parse_config(configuration_file);
-    println!("{:?}", configuration);
+    // Make sure folders are there
+    core::ensure_folders(configuration)?;
+
+    Ok(())
 }

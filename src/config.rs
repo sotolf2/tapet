@@ -6,22 +6,22 @@ use std::io::Error;
 #[derive(Debug, Deserialize)]
 pub struct Config {
     //tapet: Option<Tapet>,
-    tapet: Tapet,
-    wallhaven: Wallhaven,
+    pub tapet: Tapet,
+    pub wallhaven: Wallhaven,
 }
 
 #[derive(Debug, Deserialize)]
-struct Tapet {
-    favorites_folder: Option<String>,
-    downloads_folder: Option<String>,
-    previous_folder: Option<String>,
-    previous_keep: Option<u64>,
+pub struct Tapet {
+    pub favorites_folder: String,
+    pub downloads_folder: String,
+    pub previous_folder: String,
+    pub previous_keep: u64,
 }
 
 #[derive(Debug, Deserialize)]
-struct Wallhaven {
-    download_number: Option<u64>,
-    tags: Option<String>,
+pub struct Wallhaven {
+    pub download_number: u64,
+    pub tags: String,
 }
 
 pub fn parse_config(filepath: &Path) -> Result<Config, Error> {
