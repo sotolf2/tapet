@@ -1,0 +1,14 @@
+[package]
+name = "tapet"
+version = "0.1.0"
+authors = ["Sotolf2 <trym.karlsen@protonmail.ch>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = "2.33.3"
+reqwest = "0.10.10"
+toml = "0.5.8"
+shellexpand = "2.1"
+serde = "1.0.118"
