@@ -1,19 +1,17 @@
-use toml::de;
 use serde::Deserialize;
 use std::path::Path;
-use std::fs;
-use std::io;
 use std::io::Error;
 
 //main config struct
 #[derive(Debug, Deserialize)]
 pub struct Config {
-    tapet: Option<TapetConfig>,
-    wallhaven: Option<WallhavenConfig>,
+    //tapet: Option<Tapet>,
+    tapet: Tapet,
+    wallhaven: Wallhaven,
 }
 
 #[derive(Debug, Deserialize)]
-struct TapetConfig {
+struct Tapet {
     favorites_folder: Option<String>,
     downloads_folder: Option<String>,
     previous_folder: Option<String>,
@@ -21,13 +19,13 @@ struct TapetConfig {
 }
 
 #[derive(Debug, Deserialize)]
-struct WallhavenConfig {
+struct Wallhaven {
     download_number: Option<u64>,
     tags: Option<String>,
 }
 
 pub fn parse_config(filepath: &Path) -> Result<Config, Error> {
     let config_file = std::fs::read_to_string(filepath)?;
-    let config: Config = toml::de::from_str(&config_file)?;
+    let config: Config = toml::from_str(&config_file)?;
     Ok(config)
 }
