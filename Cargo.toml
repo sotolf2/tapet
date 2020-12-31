@@ -11,4 +11,4 @@ clap = "2.33.3"
 reqwest = "0.10.10"
 toml = "0.5.8"
 shellexpand = "2.1"
-serde = "1.0.118"
+serde = { version = "1.0.118", features = ["derive"] }

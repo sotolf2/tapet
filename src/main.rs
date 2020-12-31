@@ -2,6 +2,8 @@ use clap::{App, Arg};
 use std::env;
 use std::collections::HashMap;
 use std::path::Path;
+pub mod config;
+//use crate::config;
 
 fn main() {
     // Parse arguements
@@ -39,5 +41,6 @@ fn main() {
     let config_string = format!("{}{}", config_folder, relative_conf_path);
     let configuration_file = Path::new(&config_string);
 
-
+    let configuration = config::parse_config(configuration_file);
+    println!("{:?}", configuration);
 }
