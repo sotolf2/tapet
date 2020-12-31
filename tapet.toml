@@ -1,0 +1,9 @@
+[tapet]
+favorites_folder = "~/.config/tapet/favorites"
+downloads_folder = "~/.config/tapet/downloads"
+previous_folder = "~/.config/tapet/previous"
+previous_keep = 10
+
+[wallhaven]
+download_number = 24
+tags = "test"
