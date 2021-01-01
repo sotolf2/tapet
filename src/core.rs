@@ -6,6 +6,7 @@ use std::path::Path;
 use std::process::Command;
 use rand::seq::SliceRandom;
 use crate::config::Config;
+use crate::config;
 
 fn random_from_folder(folder_str: &str) -> String{
     let folder_path = Path::new(&folder_str);
@@ -56,7 +57,7 @@ pub fn set_background(config: &Config, image_path: &str) {
     }
 } 
 
-pub fn ensure_folders(config: &Config) -> Result<(), Error>{
+pub fn ensure_folders(config: &Config) -> Result<(), Error> {
     let tapet = &config.tapet;
     let folders = vec![
         &tapet.favorites_folder,
@@ -71,5 +72,11 @@ pub fn ensure_folders(config: &Config) -> Result<(), Error>{
             fs::create_dir_all(folder_path)?;
         }
     }
+    Ok(())
+}
+
+pub fn restore_background(config: &Config, state_path: &str) -> Result<(),Error> {
+    let state = config::retrieve_state(state_path)?;
+    set_background(config, &state.current_wallpaper);
     Ok(())
 }

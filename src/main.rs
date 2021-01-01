@@ -66,14 +66,7 @@ fn main() -> Result<(), Error> {
     core::ensure_folders(&configuration)?;
 
     // TEMP: 
-    let rand_fav = core::random_favorite(&configuration);
-    println!("Random favourite: {}", rand_fav);
-    let state = config::State {current_wallpaper: rand_fav.clone(), is_favorite: true};
-    core::set_background(&configuration, &rand_fav);
-    println!("Saving state: {:?} in: {}", state, &state_path);
-    config::save_state(state, &state_path)?;
-    let state2 = config::retrieve_state(&state_path)?;
-    println!("Retrieved state: {:?}", state2);
+    core::restore_background(&configuration, &state_path)?;
 
 
     Ok(())
