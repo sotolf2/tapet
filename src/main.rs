@@ -50,7 +50,9 @@ fn main() -> Result<(), Error> {
     core::ensure_folders(&configuration)?;
 
     // TEMP: 
-    println!("Random favourite: {}", core::random_favorite(&configuration));
+    let rand_fav = core::random_favorite(&configuration);
+    println!("Random favourite: {}", rand_fav);
+    core::set_with_feh(&rand_fav);
 
     Ok(())
 }

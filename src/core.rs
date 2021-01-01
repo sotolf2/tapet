@@ -3,6 +3,7 @@
 use std::fs;
 use std::io::Error;
 use std::path::Path;
+use std::process::Command;
 use rand::seq::SliceRandom;
 use crate::config::Config;
 
@@ -29,6 +30,21 @@ pub fn random_favorite(config: &Config) -> String {
 pub fn random_downloaded(config: &Config) -> String {
     let downloaded_string = String::from(shellexpand::tilde(&config.tapet.downloads_folder));
     random_from_folder(&downloaded_string)
+}
+
+pub fn set_with_feh(image_path: &str) {
+    let status = Command::new("feh")
+        .arg("--bg-scale")
+        .arg(image_path)
+        .status().expect("failed to execute feh are you sure it's installed and on the path?");
+    assert!(status.success())
+}
+pub fn set_with_nitrogen(image_path: &str) {
+    let status = Command::new("nitrogen")
+        .arg("--set-scaled")
+        .arg(image_path)
+        .status().expect("failed to execute feh are you sure it's installed and on the path?");
+    assert!(status.success())
 }
 
 pub fn ensure_folders(config: &Config) -> Result<(), Error>{
