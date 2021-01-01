@@ -27,6 +27,20 @@ fn main() -> Result<(), Error> {
                 .takes_value(false),
         )
         .arg(
+            Arg::with_name("random")
+            .short("r")
+            .long("random-favourite")
+            .help("Set a random wallpaper from the favourites folder")
+            .takes_value(false),
+        )
+        .arg(
+            Arg::with_name("restore")
+            .short("R")
+            .long("restore")
+            .help("Restores current wallpaper")
+            .takes_value(false),
+        )
+        .arg(
             Arg::with_name("update")
                 .short("u")
                 .long("update")
