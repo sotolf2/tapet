@@ -2,11 +2,11 @@ use clap::{App, Arg};
 use std::env;
 use std::collections::HashMap;
 use std::path::Path;
-use std::io::Error;
+use std::error::Error;
 mod config;
 mod core;
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<(), Box<dyn Error>> {
     // Parse arguements
     let matches = App::new("tapet")
         .version("0.1")
@@ -67,6 +67,7 @@ fn main() -> Result<(), Error> {
 
     // TEMP: 
     core::restore_background(&configuration, &state_path)?;
+    core::set_new_downloaded(&configuration, &state_path)?;
 
 
     Ok(())

@@ -1,7 +1,8 @@
 // Here the core stuff for tapet stuff that touches the filesystem
 // and so on
 use std::fs;
-use std::io::Error;
+use fs_extra;
+use std::error::Error;
 use std::path::Path;
 use std::process::Command;
 use rand::seq::SliceRandom;
@@ -57,7 +58,7 @@ pub fn set_background(config: &Config, image_path: &str) {
     }
 } 
 
-pub fn ensure_folders(config: &Config) -> Result<(), Error> {
+pub fn ensure_folders(config: &Config) -> Result<(), Box<dyn Error>> {
     let tapet = &config.tapet;
     let folders = vec![
         &tapet.favorites_folder,
@@ -75,8 +76,52 @@ pub fn ensure_folders(config: &Config) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn restore_background(config: &Config, state_path: &str) -> Result<(),Error> {
+pub fn restore_background(config: &Config, state_path: &str) -> Result<(), Box<dyn Error>> {
     let state = config::retrieve_state(state_path)?;
     set_background(config, &state.current_wallpaper);
+    Ok(())
+}
+
+fn move_to_previous(file_path: &str, config: &Config) -> Result<(), Box<dyn Error>> {
+    let filename = Path::new(&file_path).file_name().expect("Could not get stored filename").to_str().expect("Couldn't turn osString to string");
+    let folder_to = String::from(shellexpand::tilde(&config.tapet.previous_folder));
+    let destination = format!("{}/{}", folder_to, filename);
+    let copy_options = fs_extra::file::CopyOptions {overwrite: false, skip_exist: true, buffer_size: 64000};
+    fs_extra::file::move_file(file_path, destination, &copy_options)?;
+    Ok(())
+}
+
+pub fn set_new_downloaded(config: &Config, state_path: &str) -> Result<(), Box<dyn Error>> {
+    let new_wp_path = random_downloaded(config);
+    let cur_state = config::retrieve_state(state_path)?;
+
+    if cur_state.is_downloaded {
+        let path_from = cur_state.current_wallpaper;
+        move_to_previous(&path_from, &config)?;
+    }
+    // Create a new state and set it
+    let new_state = config::State {current_wallpaper: new_wp_path.clone(), is_downloaded: true, is_favorite: false};
+    config::save_state(new_state, state_path)?;
+
+    // And finally really set the wallpaper
+    set_background(config, &new_wp_path);
+
+    Ok(())
+}
+
+pub fn set_random_favorite(config: &Config, state_path: &str) -> Result<(), Box<dyn Error>> {
+    let new_wp_path = random_favorite(config);
+    let cur_state = config::retrieve_state(state_path)?;
+
+    if cur_state.is_downloaded {
+        let path_from = cur_state.current_wallpaper;
+        move_to_previous(&path_from, &config)?;
+    }
+
+    let new_state = config::State {current_wallpaper: new_wp_path.clone(), is_downloaded: false, is_favorite: true};
+    config::save_state(new_state, state_path)?;
+
+    set_background(config, &new_wp_path);
+
     Ok(())
 }

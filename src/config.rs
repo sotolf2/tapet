@@ -37,6 +37,7 @@ pub fn parse_config(filepath: &Path) -> Result<Config, Error> {
 pub struct State {
     pub current_wallpaper: String,
     pub is_favorite: bool,
+    pub is_downloaded: bool,
 }
 
 pub fn save_state(state: State, filepath: &str) -> Result<(), Error> {
