@@ -43,7 +43,7 @@ pub fn set_with_nitrogen(image_path: &str) {
     let status = Command::new("nitrogen")
         .arg("--set-scaled")
         .arg(image_path)
-        .status().expect("failed to execute feh are you sure it's installed and on the path?");
+        .status().expect("failed to execute nitrogen are you sure it's installed and on the path?");
     assert!(status.success())
 }
 
