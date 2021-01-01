@@ -1,2 +1,2 @@
 // Downloading from wallhaven api
-use reqwest;
+use attohttpc;
