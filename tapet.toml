@@ -3,6 +3,7 @@ favorites_folder = "~/.config/tapet/favorites"
 downloads_folder = "~/.config/tapet/downloads"
 previous_folder = "~/.config/tapet/previous"
 previous_keep = 10
+wallpaper_setter = "nitrogen"
 
 [wallhaven]
 download_number = 24

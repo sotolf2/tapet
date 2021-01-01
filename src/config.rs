@@ -16,6 +16,7 @@ pub struct Tapet {
     pub downloads_folder: String,
     pub previous_folder: String,
     pub previous_keep: u64,
+    pub wallpaper_setter: String,
 }
 
 #[derive(Debug, Deserialize)]

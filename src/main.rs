@@ -46,7 +46,10 @@ fn main() -> Result<(), Error> {
     let configuration = config::parse_config(configuration_file)?;
 
     // Make sure folders are there
-    core::ensure_folders(configuration)?;
+    core::ensure_folders(&configuration)?;
+
+    // TEMP: 
+    println!("Random favourite: {}", core::random_favorite(&configuration));
 
     Ok(())
 }
