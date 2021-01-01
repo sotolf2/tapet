@@ -47,3 +47,9 @@ pub fn save_state(state: State, filepath: &str) -> Result<(), Error> {
     
     Ok(())
 }
+
+pub fn retrieve_state(filepath: &str) -> Result<State, Error> {
+    let state_json = fs::read_to_string(filepath)?;
+    let state: State = serde_json::from_str(&state_json)?;
+    Ok(state)
+}

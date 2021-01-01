@@ -72,6 +72,9 @@ fn main() -> Result<(), Error> {
     core::set_with_feh(&rand_fav);
     println!("Saving state: {:?} in: {}", state, &state_path);
     config::save_state(state, &state_path)?;
+    let state2 = config::retrieve_state(&state_path)?;
+    println!("Retrieved state: {:?}", state2);
+
 
     Ok(())
 }
