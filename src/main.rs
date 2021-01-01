@@ -37,9 +37,10 @@ fn main() -> Result<(), Error> {
 
     // Get configuration file path
     let env_vars: HashMap<String, String> = env::vars().collect();
-    let config_folder = env_vars.get("XDG_CONFIG_HOME").expect("Could not find $XDG_CONFIG_HOME");
-    let relative_conf_path = "/tapet/tapet.toml";
-    let config_string = format!("{}{}", config_folder, relative_conf_path);
+    let config_home = env_vars.get("XDG_CONFIG_HOME").expect("Could not find $XDG_CONFIG_HOME");
+    let conf_path = format!("{}{}", config_home, "/tapet/");
+    let configuration_file = "tapet.toml";
+    let config_string = format!("{}{}", conf_path, configuration_file);
     let configuration_file = Path::new(&config_string);
     
     // Parse configuration
