@@ -32,20 +32,29 @@ pub fn random_downloaded(config: &Config) -> String {
     random_from_folder(&downloaded_string)
 }
 
-pub fn set_with_feh(image_path: &str) {
+fn set_with_feh(image_path: &str) {
     let status = Command::new("feh")
         .arg("--bg-scale")
         .arg(image_path)
         .status().expect("failed to execute feh are you sure it's installed and on the path?");
     assert!(status.success())
 }
-pub fn set_with_nitrogen(image_path: &str) {
+fn set_with_nitrogen(image_path: &str) {
     let status = Command::new("nitrogen")
         .arg("--set-scaled")
         .arg(image_path)
         .status().expect("failed to execute nitrogen are you sure it's installed and on the path?");
     assert!(status.success())
 }
+
+pub fn set_background(config: &Config, image_path: &str) {
+    let setter = &config.tapet.wallpaper_setter;
+    match setter.as_str() {
+        "feh" => set_with_feh(image_path),
+        "nitrogen" => set_with_nitrogen(image_path),
+        _ => panic!("No known wallpaper setter set in config, (\"feh\", \"nitrogen\")"),
+    }
+} 
 
 pub fn ensure_folders(config: &Config) -> Result<(), Error>{
     let tapet = &config.tapet;
