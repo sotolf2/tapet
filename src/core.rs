@@ -82,12 +82,45 @@ pub fn restore_background(config: &Config, state_path: &str) -> Result<(), Box<d
     Ok(())
 }
 
+fn cleanup_previous(config: &Config) -> Result<(), Box<dyn Error>> {
+    let folder_path = String::from(shellexpand::tilde(&config.tapet.previous_folder));
+    let keep = config.tapet.previous_keep as usize;
+
+    let mut paths: Vec<(String, fs::Metadata)> = Vec::new();
+    for entry in fs::read_dir(&folder_path).expect("Couldn't find favourite folder") {
+        let entry = entry.expect("couldn't find file");
+        let path = entry.path();
+        let strpath = path.clone().into_os_string().into_string().expect("couldn't get a string from the path").clone();
+        let metadata = path.metadata()?;
+        paths.push((strpath, metadata));
+    }
+
+    if paths.len() > keep {
+        let to_delete = paths.len() - keep;
+        paths.sort_unstable_by(|(_, meta_a),(_, meta_b)|
+                meta_a.created().unwrap().partial_cmp(&meta_b.created().unwrap()).unwrap_or(std::cmp::Ordering::Equal));
+        let delete_me: Vec<String> = paths.iter()
+                                        .take(to_delete)
+                                        .map(|(filename, _)| filename.clone())
+                                        .take(to_delete)
+                                        .collect();
+        for path in delete_me {
+            fs::remove_file(path)?;
+        }
+    }
+
+    Ok(())
+}
+
 fn move_to_previous(file_path: &str, config: &Config) -> Result<(), Box<dyn Error>> {
     let filename = Path::new(&file_path).file_name().expect("Could not get stored filename").to_str().expect("Couldn't turn osString to string");
     let folder_to = String::from(shellexpand::tilde(&config.tapet.previous_folder));
     let destination = format!("{}/{}", folder_to, filename);
     let copy_options = fs_extra::file::CopyOptions {overwrite: false, skip_exist: true, buffer_size: 64000};
     fs_extra::file::move_file(file_path, destination, &copy_options)?;
+
+    cleanup_previous(config)?;
+
     Ok(())
 }
 
