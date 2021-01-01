@@ -92,11 +92,14 @@ fn move_to_previous(file_path: &str, config: &Config) -> Result<(), Box<dyn Erro
 }
 
 pub fn set_new_downloaded(config: &Config, state_path: &str) -> Result<(), Box<dyn Error>> {
-    let new_wp_path = random_downloaded(config);
     let cur_state = config::retrieve_state(state_path)?;
+    let path_from = cur_state.current_wallpaper;
+    let mut new_wp_path = path_from.clone();
+    while new_wp_path == path_from {
+        new_wp_path = random_downloaded(config);
+    }
 
     if cur_state.is_downloaded {
-        let path_from = cur_state.current_wallpaper;
         move_to_previous(&path_from, &config)?;
     }
     // Create a new state and set it
