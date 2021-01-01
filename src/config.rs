@@ -1,5 +1,7 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::path::Path;
+use std::io::{Write,Read};
+use std::fs;
 use std::io::Error;
 
 //main config struct
@@ -29,4 +31,19 @@ pub fn parse_config(filepath: &Path) -> Result<Config, Error> {
     let config_file = std::fs::read_to_string(filepath)?;
     let config: Config = toml::from_str(&config_file)?;
     Ok(config)
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct State {
+    pub current_wallpaper: String,
+    pub is_favorite: bool,
+}
+
+pub fn save_state(state: State, filepath: &str) -> Result<(), Error> {
+    let mut file = fs::File::create(filepath)?;
+    let state_json = serde_json::to_string(&state)?; 
+    file.write_all(state_json.as_bytes())?;
+    file.flush()?;
+    
+    Ok(())
 }

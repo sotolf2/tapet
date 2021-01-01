@@ -54,8 +54,10 @@ fn main() -> Result<(), Error> {
     let config_home = env_vars.get("XDG_CONFIG_HOME").expect("Could not find $XDG_CONFIG_HOME");
     let conf_path = format!("{}{}", config_home, "/tapet/");
     let configuration_file = "tapet.toml";
+    let state_file = "state.json";
     let config_string = format!("{}{}", conf_path, configuration_file);
     let configuration_file = Path::new(&config_string);
+    let state_path = format!("{}{}", conf_path, state_file);
     
     // Parse configuration
     let configuration = config::parse_config(configuration_file)?;
@@ -66,7 +68,10 @@ fn main() -> Result<(), Error> {
     // TEMP: 
     let rand_fav = core::random_favorite(&configuration);
     println!("Random favourite: {}", rand_fav);
+    let state = config::State {current_wallpaper: rand_fav.clone(), is_favorite: true};
     core::set_with_feh(&rand_fav);
+    println!("Saving state: {:?} in: {}", state, &state_path);
+    config::save_state(state, &state_path)?;
 
     Ok(())
 }
