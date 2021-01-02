@@ -23,7 +23,7 @@ pub struct Tapet {
 
 #[derive(Debug, Deserialize)]
 pub struct Wallhaven {
-    pub download_number: u64,
+    pub download_number: u32,
     pub tags: String,
 }
 

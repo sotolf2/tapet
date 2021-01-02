@@ -80,9 +80,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         core::restore_background(&configuration, &state_path)?;
     }
     if matches.is_present("update") {
-        let page = wallhaven::get_search_page(&configuration, 1)?;
-        println!("Page: {:?}", page);
-
+        wallhaven::download_images(&configuration)?;
     }
 
 

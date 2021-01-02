@@ -4,58 +4,107 @@ use serde_json;
 use std::error::Error;
 use serde::Deserialize;
 use crate::config::Config;
+use crate::core;
 
 #[derive(Debug, Deserialize)]
-pub struct Page {
-    pub data: Vec<Data>,
-    pub meta: Meta,
+struct Page {
+    data: Vec<Data>,
+    meta: Meta,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Data {
-    pub id: String,
-    pub url: String,
-    pub views: u32,
-    pub favorites: u32,
-    pub source: String,
-    pub purity: String,
-    pub category: String,
-    pub dimension_x: u32,
-    pub dimension_y: u32,
-    pub resolution: String,
-    pub ratio: String,
-    pub file_size: u32,
-    pub file_type: String,
-    pub created_at: String,
-    pub colors: Vec<String>,
-    pub path: String,
-    pub thumbs: Thumbs,
+struct Data {
+    id: String,
+    url: String,
+    views: u32,
+    favorites: u32,
+    source: String,
+    purity: String,
+    category: String,
+    dimension_x: u32,
+    dimension_y: u32,
+    resolution: String,
+    ratio: String,
+    file_size: u32,
+    file_type: String,
+    created_at: String,
+    colors: Vec<String>,
+    path: String,
+    thumbs: Thumbs,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Thumbs {
-    pub large: String,
-    pub original: String,
-    pub small: String,
+struct Thumbs {
+    large: String,
+    original: String,
+    small: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Meta {
-    pub current_page: u32,
-    pub last_page: u32,
-    pub per_page: u32,
-    pub total: u32,
-    pub query: Option<String>,
-    pub seed: Option<String>,
+struct Meta {
+    current_page: u32,
+    last_page: u32,
+    per_page: u32,
+    total: u32,
+    query: Option<String>,
+    seed: Option<String>,
 }
 
 const API_URL: &str = "https://wallhaven.cc/api/v1/";
 
-pub fn get_search_page(config: &Config, page_num: u32) -> Result<Page, Box<dyn Error>> {
+fn get_search_page(config: &Config, page_num: u32) -> Result<Page, Box<dyn Error>> {
+    let tags = &config.wallhaven.tags;
     let search_url = format!("{}search", API_URL);
-    let response = attohttpc::get(search_url).send()?;
+    let response = attohttpc::get(search_url)
+        .param("q", tags)
+        .param("page", page_num)
+        .send()?;
     let response_str = response.text()?;
     //println!("Response: {}", response_str);
     let page: Page = serde_json::from_str(&response_str)?;
     Ok(page)
 }
+
+fn page_to_urls(page: Page) -> Vec<String> {
+    let mut urls = Vec::new();
+
+    for data in page.data {
+        urls.push(data.path);
+    }
+
+    urls
+}
+
+pub fn download_images(config: &Config) -> Result<(), Box<dyn Error>> {
+    let num_to_keep = config.wallhaven.download_number;
+    let current_num = core::number_downloaded(config)?;
+    let to_download = num_to_keep - current_num;
+
+    // the wallhaven api gives us 24 urls per search page.
+    // so we need to download enough pages to fill up our request.
+   let page_limit = to_download / 24 + 1;
+   let mut pages: Vec<Page> = Vec::new();
+
+   for page_num in 1..page_limit+1 {
+        pages.push(get_search_page(config, page_num)?);
+   }
+   
+   let mut urls: Vec<String> = Vec::new();
+   for page in pages {
+       for url in page_to_urls(page) {
+           urls.push(url);
+       }
+   }
+
+   let download_queue: Vec<&String> = urls.iter().take(to_download as usize).collect();
+
+
+   for url in download_queue {
+       println!("Downloading: {}", url);
+       core::download_image(config ,&url)?;
+   }
+    
+
+    Ok(())
+}
+

@@ -1,7 +1,9 @@
 // Here the core stuff for tapet stuff that touches the filesystem
 // and so on
-use std::fs;
+use attohttpc;
 use fs_extra;
+use std::fs;
+use std::io::Write;
 use std::error::Error;
 use std::path::Path;
 use std::process::Command;
@@ -80,6 +82,33 @@ pub fn restore_background(config: &Config, state_path: &str) -> Result<(), Box<d
     let state = config::retrieve_state(state_path)?;
     set_background(config, &state.current_wallpaper);
     Ok(())
+}
+
+
+pub fn download_image(config: &Config, url: &str) -> Result<(), Box<dyn Error>> {
+    let response = attohttpc::get(url).send()?;
+    let img_data = response.bytes().expect("couldn't get bytes from image");
+    let image_filename = Path::new(url).file_name().expect("couldn't get filename from url").to_str().expect("Couldn't turn osString into string");
+    let download_folder = String::from(shellexpand::tilde(&config.tapet.downloads_folder));
+    let destination = format!("{}/{}", download_folder, image_filename);
+    
+    let mut file = fs::File::create(destination)?;
+    file.write_all(&img_data)?;
+    file.flush()?;
+
+    Ok(())
+} 
+
+pub fn number_downloaded(config: &Config) -> Result<u32, Box<dyn Error>> {
+    let folder_path = String::from(shellexpand::tilde(&config.tapet.downloads_folder));
+    let mut paths: Vec<String> = Vec::new();
+    for entry in fs::read_dir(&folder_path).expect("Couldn't find downloads_folder") {
+        let entry = entry.expect("Couldn't find file");
+        let path = entry.path();
+        let strpath = path.clone().into_os_string().into_string().expect("couldn't get a string from the path").clone();
+        paths.push(strpath);
+    }
+    Ok(paths.len() as u32)
 }
 
 fn cleanup_previous(config: &Config) -> Result<(), Box<dyn Error>> {
