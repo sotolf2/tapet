@@ -65,9 +65,22 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Make sure folders are there
     core::ensure_folders(&configuration)?;
 
-    // TEMP: 
-    core::restore_background(&configuration, &state_path)?;
-    core::set_new_downloaded(&configuration, &state_path)?;
+    // Go through and do the desired things
+    if matches.is_present("next") {
+        core::set_new_downloaded(&configuration, &state_path)?;
+    }
+    if matches.is_present("favourite") {
+        core::copy_to_favorite(&configuration, &state_path)?;
+    }
+    if matches.is_present("random") {
+        core::set_random_favorite(&configuration, &state_path)?;
+    }
+    if matches.is_present("restore") {
+        core::restore_background(&configuration, &state_path)?;
+    }
+    if matches.is_present("update") {
+        println!("Not yet implemented");
+    }
 
 
     Ok(())
