@@ -9,10 +9,10 @@ mod wallhaven;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Parse arguements
-    let matches = App::new("tapet")
+    let matches = App::new("Tapet")
         .version("0.1")
         .author("Sotolf")
-        .about("A wallpaper helper")
+        .about("A wallpaper switcher helper")
         .arg(
             Arg::with_name("next")
                 .short("n")
