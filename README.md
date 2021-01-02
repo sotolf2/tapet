@@ -6,6 +6,9 @@ Tapet is a wallpaper switcher that I'm working on to learn Rust, it works for me
 don't guarantee that it will work for everyone, I'm very happy to get suggestions or bug
 reports if there is anything off with it. There are probably a lot of things that are still
 suboptimal, but I hope to make it better as I learn more.
+For now you will have to set it up with cron, or some other scheduling daemon to get it to
+automatically change the wallpapers for you, but I hope to build that functionality into it as
+well.
 
 ## Usage
     Tapet 0.1
