@@ -124,6 +124,18 @@ fn move_to_previous(file_path: &str, config: &Config) -> Result<(), Box<dyn Erro
     Ok(())
 }
 
+pub fn copy_to_favorite(config: &Config, state_path: &str) -> Result<(), Box<dyn Error>> {
+    let cur_state = config::retrieve_state(state_path)?;
+    let cur_wp = cur_state.current_wallpaper;
+    let filename = Path::new(&cur_wp).file_name().expect("could not get storted filename").to_str().expect("Couldn't turn osSrtring to string");
+    let folder_to = String::from(shellexpand::tilde(&config.tapet.favorites_folder));
+    let destination = format!("{}/{}", folder_to, filename);
+    let copy_options = fs_extra::file::CopyOptions {overwrite: false, skip_exist: true, buffer_size: 64000};
+    fs_extra::file::copy(cur_wp, destination, &copy_options)?;
+
+    Ok(())
+}
+
 pub fn set_new_downloaded(config: &Config, state_path: &str) -> Result<(), Box<dyn Error>> {
     let cur_state = config::retrieve_state(state_path)?;
     let path_from = cur_state.current_wallpaper;
