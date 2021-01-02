@@ -26,6 +26,8 @@ dependencies = [
  "log",
  "native-tls",
  "openssl",
+ "serde",
+ "serde_json",
  "url",
  "wildmatch",
 ]

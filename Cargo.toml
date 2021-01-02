@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 clap = "2.33.3"
-attohttpc = "0.16.0"
+attohttpc = {version = "0.16.0", features = ["json"]}
 toml = "0.5.8"
 shellexpand = "2.1"
 serde = { version = "1.0.118", features = ["derive"] }

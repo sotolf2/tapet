@@ -5,6 +5,7 @@ use std::path::Path;
 use std::error::Error;
 mod config;
 mod core;
+mod wallhaven;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Parse arguements
@@ -79,7 +80,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         core::restore_background(&configuration, &state_path)?;
     }
     if matches.is_present("update") {
-        println!("Not yet implemented");
+        let page = wallhaven::get_search_page(&configuration, 1)?;
+        println!("Page: {:?}", page);
+
     }
 
 
