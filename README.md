@@ -20,6 +20,7 @@ About the name, it's pretty simple, and silly, it's just the Norwegian word for 
         tapet [FLAGS]
 
     FLAGS:
+        -d, --daemon              runs in the background and updates wallpaper automatically
         -f, --favorite            Saves the current wallpaper in the favorites
         -h, --help                Prints help information
         -n, --next                sets the next wallpaper
@@ -58,6 +59,7 @@ have already seen, but it's something that I'll be working on still
     the amount of urls to keep in history is configurable.
 - flags can be combined, so if you want to set a wallpaper and put in a replacement at once you can
   do `tapet -nu` for example
+- Daemon mode will mostly sleep, but wake up and update the wallpaper at set intervals
 
 ## Planned for the future
 
