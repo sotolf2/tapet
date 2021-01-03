@@ -4,6 +4,7 @@ use serde_json;
 use std::error::Error;
 use serde::Deserialize;
 use crate::config::Config;
+use crate::config;
 use crate::core;
 
 #[derive(Debug, Deserialize)]
@@ -75,34 +76,37 @@ fn page_to_urls(page: Page) -> Vec<String> {
     urls
 }
 
-pub fn download_images(config: &Config) -> Result<(), Box<dyn Error>> {
+pub fn download_images(config: &Config, history_path: &str) -> Result<(), Box<dyn Error>> {
     let num_to_keep = config.wallhaven.download_number;
     let current_num = core::number_downloaded(config)?;
     let to_download = num_to_keep - current_num;
 
     // the wallhaven api gives us 24 urls per search page.
     // so we need to download enough pages to fill up our request.
-   let page_limit = to_download / 24 + 1;
-   let mut pages: Vec<Page> = Vec::new();
-
-   for page_num in 1..page_limit+1 {
-        pages.push(get_search_page(config, page_num)?);
-   }
-   
+   let mut page_num = 1;
+   let history = config::retrive_history(history_path)?.urls;
    let mut urls: Vec<String> = Vec::new();
-   for page in pages {
-       for url in page_to_urls(page) {
-           urls.push(url);
-       }
+
+   while urls.len() <= to_download as usize {
+        let page = get_search_page(config, page_num)?;
+        
+        for url in page_to_urls(page) {
+            if !history.contains(&url) {
+               urls.push(url);
+            }
+        }
+        page_num += 1;
    }
 
    let download_queue: Vec<&String> = urls.iter().take(to_download as usize).collect();
 
 
-   for url in download_queue {
+   for url in &download_queue {
        println!("Downloading: {}", url);
        core::download_image(config ,&url)?;
    }
+
+   config::append_history(config, history_path, download_queue)?;
     
 
     Ok(())

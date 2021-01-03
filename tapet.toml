@@ -3,8 +3,9 @@ favorites_folder = "~/.config/tapet/favorites"
 downloads_folder = "~/.config/tapet/downloads"
 previous_folder = "~/.config/tapet/previous"
 previous_keep = 10
-wallpaper_setter = "nitrogen"
+wallpaper_setter = "feh"
+history = 500
 
 [wallhaven]
 download_number = 24
-tags = "test"
+tags = "+nature"

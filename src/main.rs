@@ -56,9 +56,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     let conf_path = format!("{}{}", config_home, "/tapet/");
     let configuration_file = "tapet.toml";
     let state_file = "state.json";
+    let history_file = "history.json";
     let config_string = format!("{}{}", conf_path, configuration_file);
     let configuration_file = Path::new(&config_string);
     let state_path = format!("{}{}", conf_path, state_file);
+    let history_path = format!("{}{}", conf_path, history_file);
+
     
     // Parse configuration
     let configuration = config::parse_config(configuration_file)?;
@@ -80,9 +83,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         core::restore_background(&configuration, &state_path)?;
     }
     if matches.is_present("update") {
-        wallhaven::download_images(&configuration)?;
+        wallhaven::download_images(&configuration, &history_path)?;
     }
-
 
     Ok(())
 }
