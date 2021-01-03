@@ -1,6 +1,4 @@
 // Downloading from wallhaven api
-use attohttpc;
-use serde_json;
 use std::error::Error;
 use serde::Deserialize;
 use crate::config::Config;

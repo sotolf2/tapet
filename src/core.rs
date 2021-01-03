@@ -1,7 +1,5 @@
 // Here the core stuff for tapet stuff that touches the filesystem
 // and so on
-use attohttpc;
-use fs_extra;
 use std::fs;
 use std::io::Write;
 use std::error::Error;

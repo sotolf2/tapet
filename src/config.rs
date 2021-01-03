@@ -87,7 +87,7 @@ pub fn save_history(history: History, filepath: &str) -> Result<(), Error> {
 
 pub fn append_history(config: &Config, filepath: &str, urls: Vec<&String>) -> Result<(), Error> {
     let limit = config.tapet.history as usize;
-    let mut history = retrive_history(filepath)?.urls.clone();
+    let mut history = retrive_history(filepath)?.urls;
     
     for url in urls {
         history.push(String::from(url));
