@@ -48,6 +48,13 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .help("Updates new wallpapers")
                 .takes_value(false),
         )
+        .arg(
+            Arg::with_name("daemon")
+            .short("d")
+            .long("daemon")
+            .help("runs in the background and updates wallpaper automatically")
+            .takes_value(false),
+        )
         .get_matches();
 
     // Get configuration file path

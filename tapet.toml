@@ -1,11 +1,23 @@
 [tapet]
+# folder for storing favourited wallpapers
 favorites_folder = "~/.config/tapet/favorites"
+# folder for storing downloaded wallpapers
 downloads_folder = "~/.config/tapet/downloads"
+# folder for keeping wallpapers that has been shown
 previous_folder = "~/.config/tapet/previous"
+# how many "old" wallpapers to keep
 previous_keep = 10
+# Program used to set wallpaper ("feh" or "nitrogen")
 wallpaper_setter = "feh"
+# How many urls to keep to ensure we dont redownload the same
 history = 500
+# number of minutes between each wallpaper change
+interval = 60
+# When running as a daemon it will download wallpapers every x time wallpaper is changed
+download_every = 10
 
 [wallhaven]
+# The number of wallpapers to download
 download_number = 24
-tags = "+nature"
+# Wallhaven tags to use when searching ("+nature", "+anime +japan" etc)
+tags = ""
