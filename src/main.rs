@@ -1,8 +1,10 @@
 use clap::{App, Arg};
 use std::env;
 use std::collections::HashMap;
-use std::path::Path;
 use std::error::Error;
+use std::path::Path;
+use std::time::Duration;
+use std::thread;
 mod config;
 mod core;
 mod wallhaven;
@@ -92,6 +94,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     if matches.is_present("update") {
         wallhaven::download_images(&configuration, &history_path)?;
     }
-
+    if matches.is_present("daemon") {
+        let sleep_min = configuration.tapet.interval;
+        let sleep_duration = Duration::from_secs(sleep_min * 60);
+        let mut counter = 0;
+        loop {
+            core::set_new_downloaded(&configuration, &state_path)?;
+            if counter == 10 {
+                wallhaven::download_images(&configuration, &history_path)?;
+                counter = 0;
+            }
+            counter += 1;
+            thread::sleep(sleep_duration);
+        }
+    }
     Ok(())
 }

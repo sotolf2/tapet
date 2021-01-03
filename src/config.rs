@@ -20,8 +20,8 @@ pub struct Tapet {
     pub previous_keep: u64,
     pub wallpaper_setter: String,
     pub history: u32,
-    pub interval: u32,
-    pub download_every: u32,
+    pub interval: u64,
+    pub download_every: u64,
 }
 
 #[derive(Debug, Deserialize)]
