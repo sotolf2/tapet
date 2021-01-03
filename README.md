@@ -54,6 +54,8 @@ have already seen, but it's something that I'll be working on still
   - if you want to search specified tags this can be configured in the configuration file
   - will keep a history of the last x number of wallpapers, so we don't download the same twice,
     the amount of urls to keep in history is configurable.
+- flags can be combined, so if you want to set a wallpaper and put in a replacement at once you can
+  do `tapet -nu` for example
 
 ## Planned for the future
 
