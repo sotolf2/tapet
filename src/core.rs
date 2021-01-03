@@ -36,7 +36,7 @@ pub fn random_downloaded(config: &Config) -> String {
 
 fn set_with_feh(image_path: &str) {
     let status = Command::new("feh")
-        .arg("--bg-scale")
+        .arg("--bg-fill")
         .arg(image_path)
         .status().expect("failed to execute feh are you sure it's installed and on the path?");
     assert!(status.success())
