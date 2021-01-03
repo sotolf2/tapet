@@ -52,13 +52,14 @@ have already seen, but it's something that I'll be working on still
   - will use the wallhaven.cc API (for now only that one) 
   - keep a set amount of wallpapers in the downloads folder
   - if you want to search specified tags this can be configured in the configuration file
-  set it up with a  cron-job if we don't want to
+  - will keep a history of the last x number of wallpapers, so we don't download the same twice,
+    the amount of urls to keep in history is configurable.
 
 ## Planned for the future
 
-- The first thing is to make the download not download already seen images
 - autodetect to see what walpapersetter(s) are installed on the system if none are configured in the
 - when all of the above kind of works make some daemon mode to run it with so that we don't have to
+  make a cron job
 - add more sites to download from?
 - maybe wallhaven accounts features, but nothing planned there yet
 - other stuff
