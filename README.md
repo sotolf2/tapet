@@ -10,6 +10,8 @@ For now you will have to set it up with cron, or some other scheduling daemon to
 automatically change the wallpapers for you, but I hope to build that functionality into it as
 well.
 
+About the name, it's pretty simple, and silly, it's just the Norwegian word for wallpaper.
+
 ## Usage
     Tapet 0.1
     A wallpaper helper
