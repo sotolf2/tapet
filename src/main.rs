@@ -82,7 +82,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if matches.is_present("next") {
         core::set_new_downloaded(&configuration, &state_path)?;
     }
-    if matches.is_present("favourite") {
+    if matches.is_present("favorite") {
         core::copy_to_favorite(&configuration, &state_path)?;
     }
     if matches.is_present("random") {
@@ -97,10 +97,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     if matches.is_present("daemon") {
         let sleep_min = configuration.tapet.interval;
         let sleep_duration = Duration::from_secs(sleep_min * 60);
+        let counter_lim = configuration.tapet.download_every;
         let mut counter = 0;
         loop {
             core::set_new_downloaded(&configuration, &state_path)?;
-            if counter == 10 {
+            if counter == counter_lim {
                 wallhaven::download_images(&configuration, &history_path)?;
                 counter = 0;
             }
