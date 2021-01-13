@@ -37,6 +37,31 @@ that I can start to use it for myself switching wallpapers work, favouriting wor
 downloading works, I still need to figure out how to make it not redownload images that you
 have already seen, but it's something that I'll be working on still
 
+## Installation
+
+I'm looking at making a makefile to do the installation but I'm not quite sure how those work yet.
+So for the mean time, the way to install it goes as follows.
+
+clone the repository with 
+
+`git clone https://github.com/sotolf2/tapet.git`
+
+then go into the folder, and build the release version (optimized, so runs faster)
+
+`cargo build --release` 
+
+then copy the executable to somewhere on your path
+
+`sudo cp target/release/tapet /usr/bin/tapet`
+
+and copy the configuration file over to your .config directory
+
+`mkdir ~/.config/tapet`
+
+`cp tapet.toml ~/.config/tapet/tapet.toml`
+
+then install either feh or nitrogen with your packet manager and edit the configuration to fit your needs.
+
 ## How does it work
 
 - Saves configuration in $XDG_CONFIG_HOME/tapet/tapet.toml
@@ -61,9 +86,10 @@ have already seen, but it's something that I'll be working on still
   do `tapet -nu` for example
 - Daemon mode will mostly sleep, but wake up and update the wallpaper at set intervals
 
+
 ## Planned for the future
 
-- autodetect to see what walpapersetter(s) are installed on the system if none are configured in the
+- autodetect to see what walpapersetter(s) are installed on the system if none are configured in the configuration file
 - when all of the above kind of works make some daemon mode to run it with so that we don't have to
   make a cron job
 - add more sites to download from?
